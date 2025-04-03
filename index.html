@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>jQuery New Account Creation Form</title>
+<style>
+    span.error { color: red; font-size: 12px; }
+    #output { margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>jQuery New Account Creation Form</h1>
+<form id="new-account-form">
+    <p>
+        <input type="email" size="30" name="email" value="" placeholder="Enter your email address">
+        <span class="error email-error"></span>
+    </p>
+    <p>
+        <input type="password" size="30" name="password1" value="" placeholder="Enter a password">
+        <span class="error password-error"></span>
+    </p>
+    <p>
+        <input type="password" size="30" name="password2" value="" placeholder="Reenter the password">
+    </p>
+    <button type="submit">Create Account</button>
+</form>
+<p>Form Output: <span id="output"></span></p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+
+    // Email validation function
+    function isValidEmail() {
+        let email = $.trim($("input[name='email']").val());
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (emailPattern.test(email)) {
+            return true;
+        } else {
+            $("span.email-error").text("Please enter a valid email address.");
+            return false;
+        }
+    }
+
+    // Password validation function (checks if passwords match and are not empty)
+    function validatePasswords() {
+        let password1 = $("input[name='password1']").val();
+        let password2 = $("input[name='password2']").val();
+
+        if (password1 === "" || password2 === "") {
+            $("span.password-error").text("Password fields cannot be empty.");
+            return false;
+        }
+
+        if (password1 !== password2) {
+            $("span.password-error").text("Passwords do not match.");
+            return false;
+        }
+
+        return true;
+    }
+
+    $("input").focus(function() {
+        clearResults();
+    });
+
+    // Clear error messages function
+    function clearResults() {
+        $("span.error").text("");  // Clears error messages when focus is on input
+    }
+
+    // Form submit event
+    $("#new-account-form").submit(function(event) {
+        event.preventDefault();  // Prevent the form from reloading
+
+        // Clear previous output results
+        $("#output").empty();
+
+        // Validate email and passwords
+        if (isValidEmail() && validatePasswords()) {
+            let email = $("input[name='email']").val();
+            $("#output").append("<p>Email: " + email + "</p>");
+            $("#output").append("<p>Passwords match!</p>");
+        }
+    });
+});
+</script>
+
+</body>
+</html>
